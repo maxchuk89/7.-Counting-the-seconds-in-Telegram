@@ -21,21 +21,17 @@ def reply(chat_id, text):
     bot.create_countdown(delay, notify_progress, chat_id=chat_id, message_id=message_id, total=delay)
 
 def notify_progress(secs_left, chat_id, message_id, total):
- 
     progress_bar = render_progressbar(total, total - secs_left, length=15)
-    if secs_left > 0:
-        new_text = "Осталось {} секунд\n{}".format(secs_left, progress_bar)
-        bot.update_message(chat_id, message_id, new_text)
-    elif secs_left == 0:
-        new_text = "Осталось 0 секунд\n{}".format(progress_bar)
-        bot.update_message(chat_id, message_id, new_text)
+    new_text = "Осталось {} секунд\n{}".format(secs_left, progress_bar)
+    bot.update_message(chat_id, message_id, new_text)
+    if secs_left == 0:
         bot.send_message(chat_id, "Время вышло")
 
 def main():
     load_dotenv()
     global bot
-    TG_TOKEN = os.getenv("TG_TOKEN")
-    bot = ptbot.Bot(TG_TOKEN)
+    tg_token = os.getenv("TG_TOKEN")
+    bot = ptbot.Bot(tg_token)
     bot.reply_on_message(reply)
     bot.run_bot()
 
